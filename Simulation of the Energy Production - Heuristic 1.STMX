@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xmile version="1.0" level="3" xmlns="http://www.systemdynamics.org/XMILE" xmlns:isee="http://iseesystems.com/XMILE">
+    <header>
+        <smile version="1.0" namespace="std, isee" />
+        <name>Simulation of the Energy Production - Heuristic 1</name>
+        <uuid>79024bf9-26c6-4ac5-92d2-820741cc77be</uuid>
+        <vendor>isee systems, inc.</vendor>
+        <product version="10.0.6" lang="en">STELLA</product>
+    </header>
+    <style>
+        <model font-family="Arial" font-size="9" />
+        <interface font-family="Arial" font-size="9" />
+    </style>
+    <sim_specs method="Euler" time_units="Days">
+        <start>1</start>
+        <stop>30</stop>
+        <dt>1</dt>
+    </sim_specs>
+    <model_units>
+        <units>
+            <eqn>%</eqn>
+        </units>
+        <units>
+            <eqn>m³/s</eqn>
+        </units>
+        <units>
+            <eqn>MWh</eqn>
+        </units>
+        <units>
+            <eqn>mwh/day</eqn>
+        </units>
+        <units>
+            <eqn>MWh/Days</eqn>
+        </units>
+    </model_units>
+    <isee:prefs layer="model" grid_width="20" grid_height="50" divide_by_zero_alert="true" hide_taskbar="true" show_module_prefix="true">
+        <isee:window width="1237" height="716" />
+        <isee:security />
+        <isee:print_setup width="577" height="823" />
+    </isee:prefs>
+    <isee:equation_prefs order_by="module" />
+    <model>
+        <aux name="Energia_Mensal_Vendida_1">
+            <eqn>0</eqn>
+            <units>MWh</units>
+            <display x="449" y="97" color="blue" label_side="top" label_angle="162" />
+        </aux>
+        <aux name="Perdas_e_Cons_Interno_1">
+            <eqn>0</eqn>
+            <units>%</units>
+            <display x="571" y="147" color="blue" label_side="right" label_angle="45" />
+        </aux>
+        <aux name="Carga_Mensal_1">
+            <eqn>(1 + Perdas_e_Cons_Interno_1) * Energia_Mensal_Vendida_1</eqn>
+            <units>MWh</units>
+            <display x="496" y="108" color="blue" label_side="top" label_angle="22" />
+        </aux>
+        <aux name="GAP_entre_a\nCarga_e_a_Geração_1">
+            <eqn>(Carga_Mensal_1 - Potência_Gerada__Mensal_1) / Carga_Mensal_1</eqn>
+            <display x="480" y="155" color="blue" label_angle="212" />
+        </aux>
+        <aux name="Unit_Commitment_1">
+            <doc>Função de Heaviside - Função Sinal</doc>
+            <eqn>EXP(PERCENT(DT))</eqn>
+            <display x="365" y="148" color="blue" label_side="top" label_angle="43" />
+        </aux>
+        <aux name="Qtd_Turbinas\nInstaladas_1">
+            <eqn>3</eqn>
+            <display x="295" y="146" color="blue" />
+        </aux>
+        <aux name="Vazão_Turbinada\nTotal_1">
+            <display x="237" y="418" color="blue" label_angle="209" />
+        </aux>
+        <aux name="Qtd_Turbinas\nDespachadas_1">
+            <display x="338" y="249" color="blue" label_angle="206" />
+        </aux>
+        <aux name="Engolimento\nNominal_1">
+            <eqn>0</eqn>
+            <units>m³/s</units>
+            <display x="182" y="393" color="blue" label_side="top" label_angle="143" />
+        </aux>
+        <aux name="Potência_Nominal\nDiária_1">
+            <eqn>Horas_Dia * Potência_Nominal_Horária_1</eqn>
+            <units>MWh/Days</units>
+            <display x="329" y="353" color="blue" />
+        </aux>
+        <stock name="Potência_Gerada_\nMensal_1">
+            <eqn>0</eqn>
+            <inflow>Potência_Gerada__Diária_1</inflow>
+            <non_negative />
+            <units>MWh</units>
+            <display x="465" y="304" color="blue" label_angle="108" />
+        </stock>
+        <flow name="Potência_Gerada_\nDiária_1">
+            <eqn>Qtd_Turbinas_Despachadas_1 * Potência_Nominal_Diária_1</eqn>
+            <non_negative />
+            <units>mwh/day</units>
+            <display x="368" y="305" color="blue" label_angle="317">
+                <pts>
+                    <pt x="294" y="305" />
+                    <pt x="443" y="305" />
+                </pts>
+            </display>
+        </flow>
+        <aux name="Potência_Nominal\nHorária_1">
+            <eqn>10.66</eqn>
+            <units>MWh</units>
+            <display x="276" y="329" color="blue" label_angle="230" />
+        </aux>
+        <aux name="Horas_Dia">
+            <eqn>24</eqn>
+            <units>per day</units>
+            <display x="390" y="369" color="blue" />
+        </aux>
+        <aux name="Energia_Mensal_Vendida_2">
+            <eqn>0</eqn>
+            <units>MWh</units>
+            <display x="758" y="397" color="blue" label_side="top" label_angle="161" />
+        </aux>
+        <aux name="Perdas_e_Cons_Interno_2">
+            <eqn>0</eqn>
+            <units>%</units>
+            <display x="818" y="476" color="blue" label_side="right" />
+        </aux>
+        <aux name="Carga_Mensal_2">
+            <eqn>(1 + Perdas_e_Cons_Interno_2) * Energia_Mensal_Vendida_2</eqn>
+            <units>MWh</units>
+            <display x="803" y="425" color="blue" label_side="right" label_angle="35" />
+        </aux>
+        <aux name="GAP_entre_a\nCarga_e_a_Geração_2">
+            <eqn>(Carga_Mensal_2 - Potência_Gerada__Mensal_2) / Carga_Mensal_2</eqn>
+            <display x="773" y="487" color="blue" label_angle="208" />
+        </aux>
+        <aux name="Unit_Commitment_2">
+            <doc>Função de Heaviside - Função Sinal</doc>
+            <eqn>EXP(PERCENT(DT))</eqn>
+            <display x="667" y="475" color="blue" label_side="top" label_angle="21" />
+        </aux>
+        <aux name="Qtd_Turbinas\nInstaladas_2">
+            <eqn>3</eqn>
+            <display x="607" y="437" color="blue" label_side="top" label_angle="111" />
+        </aux>
+        <aux name="Vazão_Turbinada\nTotal_2">
+            <display x="482" y="593" color="blue" />
+        </aux>
+        <aux name="Qtd_Turbinas\nDespachadas_2">
+            <display x="616" y="581" color="blue" label_angle="206" />
+        </aux>
+        <aux name="Engolimento\nNominal_2">
+            <eqn>0</eqn>
+            <units>m³/s</units>
+            <display x="447" y="516" color="blue" />
+        </aux>
+        <aux name="Potência_Nominal\nDiária_2">
+            <eqn>Horas_Dia_1 * Potência_Nominal_Horária_2</eqn>
+            <units>MWh/Days</units>
+            <display x="586" y="688" color="blue" />
+        </aux>
+        <stock name="Potência_Gerada_\nMensal_2">
+            <eqn>0</eqn>
+            <inflow>Potência_Gerada__Diária_2</inflow>
+            <non_negative />
+            <units>MWh</units>
+            <display x="756" y="639" color="blue" label_angle="108" />
+        </stock>
+        <flow name="Potência_Gerada_\nDiária_2">
+            <eqn>Qtd_Turbinas_Despachadas_2 * Potência_Nominal_Diária_2</eqn>
+            <non_negative />
+            <units>mwh/day</units>
+            <display x="659" y="640" color="blue" label_angle="317">
+                <pts>
+                    <pt x="585" y="640" />
+                    <pt x="734" y="640" />
+                </pts>
+            </display>
+        </flow>
+        <aux name="Potência_Nominal\nHorária_2">
+            <eqn>10.66</eqn>
+            <units>MWh</units>
+            <display x="484" y="691" color="blue" />
+        </aux>
+        <aux name="Horas_Dia_1">
+            <eqn>24</eqn>
+            <units>per day</units>
+            <display x="533" y="760" color="blue" />
+        </aux>
+        <display page_width="577" page_height="823" page_cols="3" page_rows="2" isee:converter_size="medium" isee:animate_flows="true" isee:animate_stocks="true" isee:animate_converters="true" interval="DT">
+            <connector x="328" y="247" uid="0" color="#FF007F">
+                <from>Qtd_Turbinas_Despachadas_1</from>
+                <to>Vazão_Turbinada_Total_1</to>
+            </connector>
+            <connector x="383" y="363" uid="1" color="#FF007F">
+                <from>Horas_Dia</from>
+                <to>Potência_Nominal_Diária_1</to>
+            </connector>
+            <connector x="456" y="518" uid="2" color="#FF007F">
+                <from>Engolimento_Nominal_2</from>
+                <to>Vazão_Turbinada_Total_2</to>
+            </connector>
+            <connector x="608" y="577" uid="3" color="#FF007F">
+                <from>Qtd_Turbinas_Despachadas_2</from>
+                <to>Vazão_Turbinada_Total_2</to>
+            </connector>
+            <connector x="303" y="141" uid="4" color="#FF007F">
+                <from>Qtd_Turbinas_Instaladas_1</from>
+                <to>Unit_Commitment_1</to>
+            </connector>
+            <connector x="767" y="397" uid="5" color="#FF007F">
+                <from>Energia_Mensal_Vendida_2</from>
+                <to>Carga_Mensal_2</to>
+            </connector>
+            <connector x="492" y="686" uid="6" color="#FF007F">
+                <from>Potência_Nominal_Horária_2</from>
+                <to>Potência_Nominal_Diária_2</to>
+            </connector>
+            <connector x="795" y="429" uid="7" color="#FF007F">
+                <from>Carga_Mensal_2</from>
+                <to>GAP_entre_a_Carga_e_a_Geração_2</to>
+            </connector>
+            <connector x="820" y="467" uid="8" color="#FF007F">
+                <from>Perdas_e_Cons_Interno_2</from>
+                <to>Carga_Mensal_2</to>
+            </connector>
+            <connector x="765" y="482" uid="9" color="#FF007F">
+                <from>GAP_entre_a_Carga_e_a_Geração_2</from>
+                <to>Unit_Commitment_2</to>
+            </connector>
+            <connector x="617" y="590" uid="10" color="#FF007F">
+                <from>Qtd_Turbinas_Despachadas_2</from>
+                <to>Potência_Gerada__Diária_2</to>
+            </connector>
+            <connector x="616" y="439" uid="11" color="#FF007F">
+                <from>Qtd_Turbinas_Instaladas_2</from>
+                <to>Unit_Commitment_2</to>
+            </connector>
+            <connector x="531" y="751" uid="12" color="#FF007F">
+                <from>Horas_Dia_1</from>
+                <to>Potência_Nominal_Diária_2</to>
+            </connector>
+            <connector x="590" y="680" uid="13" color="#FF007F">
+                <from>Potência_Nominal_Diária_2</from>
+                <to>Potência_Gerada__Diária_2</to>
+            </connector>
+            <connector x="659" y="480" uid="14" color="#FF007F">
+                <from>Unit_Commitment_2</from>
+                <to>Qtd_Turbinas_Despachadas_2</to>
+            </connector>
+            <connector x="185" y="401" uid="15" color="#FF007F">
+                <from>Engolimento_Nominal_1</from>
+                <to>Vazão_Turbinada_Total_1</to>
+            </connector>
+            <connector x="337" y="258" uid="16" color="#FF007F">
+                <from>Qtd_Turbinas_Despachadas_1</from>
+                <to>Potência_Gerada__Diária_1</to>
+            </connector>
+            <connector x="331" y="344" uid="17" color="#FF007F">
+                <from>Potência_Nominal_Diária_1</from>
+                <to>Potência_Gerada__Diária_1</to>
+            </connector>
+            <connector x="241" y="421" uid="18" color="#FF007F">
+                <from>Vazão_Turbinada_Total_1</from>
+                <to>Unit_Commitment_2</to>
+            </connector>
+            <connector x="472" y="150" uid="19" color="#FF007F">
+                <from>GAP_entre_a_Carga_e_a_Geração_1</from>
+                <to>Unit_Commitment_1</to>
+            </connector>
+            <connector x="285" y="327" uid="20" color="#FF007F">
+                <from>Potência_Nominal_Horária_1</from>
+                <to>Potência_Nominal_Diária_1</to>
+            </connector>
+            <connector x="491" y="115" uid="21" color="#FF007F">
+                <from>Carga_Mensal_1</from>
+                <to>GAP_entre_a_Carga_e_a_Geração_1</to>
+            </connector>
+            <connector x="778" y="626" uid="22" color="#FF007F">
+                <from>Potência_Gerada__Mensal_2</from>
+                <to>GAP_entre_a_Carga_e_a_Geração_2</to>
+            </connector>
+            <connector x="569" y="138" uid="23" color="#FF007F">
+                <from>Perdas_e_Cons_Interno_1</from>
+                <to>Carga_Mensal_1</to>
+            </connector>
+            <connector x="359" y="154" uid="24" color="#FF007F">
+                <from>Unit_Commitment_1</from>
+                <to>Qtd_Turbinas_Despachadas_1</to>
+            </connector>
+            <connector x="488" y="292" uid="25" color="#FF007F">
+                <from>Potência_Gerada__Mensal_1</from>
+                <to>GAP_entre_a_Carga_e_a_Geração_1</to>
+            </connector>
+            <connector x="454" y="89" uid="26" color="#FF007F">
+                <from>Energia_Mensal_Vendida_1</from>
+                <to>Carga_Mensal_1</to>
+            </connector>
+            <text_box x="194" y="48" uid="27" color="black" font-family="Gadugi" font-size="18" font-weight="bold" padding="5" width="165" height="65">UHE Montante</text_box>
+            <text_box x="557" y="293" uid="28" color="black" font-family="Gadugi" font-size="18" font-weight="bold" padding="5" width="165" height="65">PCH Jusante</text_box>
+            <text_box x="853" y="60" uid="29" color="black" font-family="Gadugi" font-size="18" font-weight="bold" padding="5" width="352" height="76">Pré Despacho Coordenado </text_box>
+        </display>
+        <interface page_width="788" page_height="528">
+            <simulation_delay>1</simulation_delay>
+            <slider x="229" y="143" color="black" width="197" height="43" min="0" max="24000" precision="1000">
+                <entity name="Energia_Mensal_Vendida_1" value="18000" />
+            </slider>
+            <slider x="223" y="222" label_angle="85" color="black" width="197" height="43" min="0" max="0.1" precision="0.01">
+                <entity name="Perdas_e_Cons_Interno_1" value="0.05" />
+            </slider>
+            <knob x="167" y="347" isee:navigate_to="true" color="black" width="83" height="91" min="0" max="50" precision="0.1">
+                <entity name="Engolimento_Nominal_1" value="26.2" />
+            </knob>
+            <knob x="271" y="348" color="black" width="83" height="91" min="0" max="20" precision="0.1">
+                <entity name="Potência_Nominal_Horária_1" value="10.7" />
+            </knob>
+        </interface>
+    </model>
+</xmile>
